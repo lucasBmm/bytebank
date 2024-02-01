@@ -18,23 +18,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurations {
 
+    @Autowired
+    private SecurityFilter securityFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    	return http
-    			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    			.and()
-    			.authorizeHttpRequests()
-    			.requestMatchers("auth/**").permitAll()
-    			.anyRequest().authenticated()
-    			.and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-    			.build();
-//        return http.csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and().authorizeHttpRequests()
-//                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-//                .anyRequest().authenticated()
-//                .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
+    	http
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests((authorizeHttpRequests) ->
+        	authorizeHttpRequests.requestMatchers(
+        			HttpMethod.POST, "/auth").permitAll()
+        			.requestMatchers(HttpMethod.POST, "/login").permitAll()
+                	.anyRequest().permitAll()
+        )
+        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
+    	return http.build();
     }
 
     @Bean
@@ -46,6 +46,4 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

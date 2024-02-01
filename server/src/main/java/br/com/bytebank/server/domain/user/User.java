@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "user")
+@Table(name = "users")
 @Entity(name = "User")
 @Getter
 @NoArgsConstructor
@@ -25,7 +25,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;

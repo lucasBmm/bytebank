@@ -1,4 +1,4 @@
-package br.com.bytebank.server.service;
+package br.com.bytebank.server.security;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import br.com.bytebank.server.domain.user.User;
 
@@ -33,4 +34,17 @@ public class TokenService {
 	 private Instant ExpirationTime() {
 	        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
 	    }
+
+	 public String getSubject(String tokenJWT) {
+	        try {
+	            var algoritmo = Algorithm.HMAC256(secret);
+	            return JWT.require(algoritmo)
+	                    .withIssuer("Bytebank Server")
+	                    .build()
+	                    .verify(tokenJWT)
+	                    .getSubject();
+	        } catch (JWTVerificationException exception) {
+	            throw new RuntimeException("Token JWT inválido ou expirado!");
+	        }
+	 }
 }

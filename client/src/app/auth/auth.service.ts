@@ -9,6 +9,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   public login(email: string, password: string) {
-    return this.http.post('api/auth/login', { email, password});
+    return this.http.post('rest/auth/login', { email, password});
   }
 }
