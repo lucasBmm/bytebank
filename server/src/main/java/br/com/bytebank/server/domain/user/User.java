@@ -6,12 +6,16 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import br.com.bytebank.server.record.AuthData;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -69,4 +73,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+	public User(@Valid AuthData data) {
+		this.email = data.email();
+		this.password = new BCryptPasswordEncoder().encode(data.password());
+	}
 }

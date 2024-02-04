@@ -1,17 +1,23 @@
 package br.com.bytebank.server.controller;
 
 import jakarta.validation.Valid;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.bytebank.server.domain.user.AuthenticationService;
 import br.com.bytebank.server.domain.user.User;
 import br.com.bytebank.server.record.AuthData;
 import br.com.bytebank.server.record.Token;
@@ -20,6 +26,9 @@ import br.com.bytebank.server.security.TokenService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+	
+	@Autowired
+	private AuthenticationService service;
 	
 	@Autowired
 	private AuthenticationManager manager;
@@ -36,8 +45,24 @@ public class AuthController {
 			return ResponseEntity.ok(new Token(token));
 		}
 		 catch(AuthenticationException e) {
-			 System.out.println(e);
 			 return ResponseEntity.badRequest().build();
 		 }
+	}
+	
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody @Valid AuthData data, UriComponentsBuilder uriBuilder) {
+		
+		User createdUser;
+		try {
+			createdUser = service.createUser(data);
+			
+			UriComponents uri = uriBuilder.path("/rest/auth/register").buildAndExpand(createdUser.getId());
+			
+			return ResponseEntity.created(uri.toUri()).build();
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
 	}
 }
