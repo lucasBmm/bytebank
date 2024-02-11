@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,10 +52,8 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody @Valid AuthData data, UriComponentsBuilder uriBuilder) {
-		
-		User createdUser;
 		try {
-			createdUser = service.createUser(data);
+			User createdUser = service.createUser(data);
 			
 			UriComponents uri = uriBuilder.path("/rest/auth/register").buildAndExpand(createdUser.getId());
 			
@@ -64,5 +63,13 @@ public class AuthController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
+	}
+	
+	@GetMapping("user")
+	public ResponseEntity<?> getUserDetails() {
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		authentication.getCredentials();
+		
+		return ResponseEntity.ok(authentication);
 	}
 }

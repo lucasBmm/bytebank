@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.com.bytebank.server.infra.UserAlreadyExistAuthenticationException;
 import br.com.bytebank.server.record.AuthData;
 import jakarta.validation.Valid;
 
@@ -36,18 +37,5 @@ public class AuthenticationService implements UserDetailsService {
 	}
 	
 	
-}
-
-final class UserAlreadyExistAuthenticationException extends AuthenticationException {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	public UserAlreadyExistAuthenticationException(final String msg) {
-        super(msg);
-    }
-
 }
 
