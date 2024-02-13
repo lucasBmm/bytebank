@@ -1,0 +1,23 @@
+.home_container {
+    display: flex;
+    justify-content: space-around;
+    background-color: #e3f9e5;
+    height: 90%;
+    padding: 2% 3%;
+
+    app-left-navigation {
+        width: 20%;
+    }
+
+    .main_content {
+        width: 60%;
+    }
+
+    app-bank-statement {
+        width: 20%;
+    }
+}
+
+.main_content {
+
+}

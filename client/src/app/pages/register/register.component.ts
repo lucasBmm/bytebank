@@ -18,14 +18,16 @@ export class RegisterComponent {
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.form = this.fb.group({
       email: new FormControl("", [Validators.required, Validators.email]),
+      fullname: new FormControl("", [Validators.required, Validators.minLength(10)]),
       password: ["", [Validators.required, Validators.minLength(3)]],
       confirmPassword: ["", [Validators.required, this.matchPasswords.bind(this)]]
     });
   }
 
   register() {
-    if (this.email?.valid && this.password?.valid && this.confirmPassword?.valid) {
-      this.authService.register(this.email.value, this.password.value).subscribe(data => {
+    if (this.allFieldsValid()) {
+      // @ts-ignore: Object is possibly 'null'.
+      this.authService.register(this.email.value, this.password.value, this.fullname.value).subscribe(data => {
         this.router.navigate(['/login']);
       });
     } else {
@@ -33,8 +35,16 @@ export class RegisterComponent {
     }
   }
 
+  private allFieldsValid(): boolean | undefined {
+    return this.email?.valid && this.password?.valid && this.confirmPassword?.valid && this.fullname?.valid;
+  }
+
   get email() {
     return this.form.get('email');
+  }
+
+  get fullname() {
+    return this.form.get('fullname');
   }
 
   get password() {

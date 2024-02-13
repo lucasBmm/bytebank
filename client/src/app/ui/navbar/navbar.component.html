@@ -1,7 +1,12 @@
-<nav class="navbar navbar-dark bg-dark px-4">
+<nav class="navbar navbar-dark bg-dark px-5">
     <div class="container-fluid">
         <a class="navbar-brand" href="/home">
             <img src="/assets/bytebank.svg" alt="Logo" class="d-inline-block align-text-top">
         </a>
+
+        <div *ngIf="username.length > 0" class="d-flex align-items-center">
+            <p class="text-success my-0 mx-3">{{username}}</p>
+            <img src="/assets/avatar.svg" alt="Ícone de um avatar de usuário" />
+        </div>
     </div>
 </nav>

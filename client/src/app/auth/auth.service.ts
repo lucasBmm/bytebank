@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
+import { UserDetails } from '../model/UserDetails.model';
 
 interface Token {
   token: string
@@ -19,11 +20,29 @@ export class AuthService {
     );
   }
 
-  public getUser() {
-    return this.http.get('rest/auth/user');
+  public getUser(): Observable<UserDetails> {
+    if (this.getUserLocal()) {
+      return of(this.getUserLocal());
+    }
+
+    return this.http.get<UserDetails>('rest/auth/user').pipe(
+      tap(res => this.setUserLocal(res))
+    );
   }
 
-  public register(email: string, password: string) {
+  private getUserLocal(): UserDetails {
+    return JSON.parse(localStorage.getItem('user')!);
+  }
+
+  private setUserLocal(user: UserDetails) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  public removeToken() {
+    localStorage.clear();
+  }
+
+  public register(email: string, password: string, fullname: string) {
     return this.http.post<Token>('rest/auth/register', { email, password });
   }
 
