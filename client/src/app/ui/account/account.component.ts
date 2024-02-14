@@ -25,6 +25,6 @@ export class AccountComponent implements OnInit {
       })
     }
 
-    this.accountService.getBalance().subscribe(balance => this.balance = balance.value);
+    this.accountService.getBalance().subscribe(res => this.balance = res.balance);
   }
 }

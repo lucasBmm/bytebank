@@ -1,3 +1,3 @@
 export interface IBalance {
-    value: number;
+    balance: number;
 }

@@ -1,1 +1,22 @@
-<p>balance works!</p>
+<div class="container">
+    <div class="wrapper">
+        <h2 class="balance">Saldo</h2>
+        <img src="../../../../assets/icone-olho.svg" 
+            (click)="changeBalanceView()" 
+            class="show_balance_button"
+            width="25"
+        />
+    </div>
+    <div class="divisor"></div>
+    <p class="conta">Conta corrente</p>
+    <p data-testid="saldo" class="valor">
+        <span class="currency">R$</span>
+        <span *ngIf="show; else dots">{{ balance }}</span>
+        <ng-template #dots>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </ng-template>
+    </p>
+</div>

@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,8 @@ import lombok.Setter;
 @Entity( name = "Account")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table( name = "account")
 public class Account {
     @Id
@@ -34,10 +33,15 @@ public class Account {
     
     private String accountNumber;
     
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
     
     private AccountStatus status;
     
-    private LocalDateTime creationDate;
-    private LocalDateTime lastUpdated;
+    private LocalDateTime creationDate = LocalDateTime.now();
+    private LocalDateTime lastUpdated = LocalDateTime.now();
+    
+    public Account(String accountNumber) {
+    	this.accountNumber = accountNumber;
+    	this.status = AccountStatus.ACTIVE;
+    }
 }

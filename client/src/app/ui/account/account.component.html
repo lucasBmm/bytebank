@@ -1,11 +1,10 @@
 <section class="container-fluid d-flex">
     <div class="detalhe_superior"></div>
     <h1>Olá, {{username}} :)!</h1>
-    <p>{{ hoje.toLocaleDateString('pt-BR') }}</p>
-    <div className="wrapper">
+    <p class="date">{{ hoje.toLocaleDateString('pt-BR') }}</p>
+    <div class="wrapper">
         <img src="../../../assets/ilustracao.svg" width="250" height="225" />
-        <app-balance></app-balance>
-        <p>{{ balance }}</p>
+        <app-balance [balance]="balance"></app-balance>
     </div>
     <div class="detalhe_inferior"></div>
 </section>

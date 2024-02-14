@@ -21,7 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.bytebank.server.domain.user.AuthenticationService;
 import br.com.bytebank.server.domain.user.User;
 import br.com.bytebank.server.record.AuthData;
+import br.com.bytebank.server.record.RegisterData;
 import br.com.bytebank.server.record.Token;
+import br.com.bytebank.server.record.UserDetailsRecord;
 import br.com.bytebank.server.security.TokenService;
 
 @RestController
@@ -51,7 +53,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody @Valid AuthData data, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> register(@RequestBody @Valid RegisterData data, UriComponentsBuilder uriBuilder) {
 		try {
 			User createdUser = service.createUser(data);
 			
@@ -66,10 +68,10 @@ public class AuthController {
 	}
 	
 	@GetMapping("user")
-	public ResponseEntity<?> getUserDetails() {
-		var authentication = SecurityContextHolder.getContext().getAuthentication();
-		authentication.getCredentials();
+	public ResponseEntity<UserDetailsRecord> getUserDetails() {
+		User currentUser = service.getCurrentUser();
+		UserDetailsRecord userDetailsRecord = new UserDetailsRecord(currentUser.getEmail(), currentUser.getFullname());
 		
-		return ResponseEntity.ok(authentication);
+		return ResponseEntity.ok(userDetailsRecord);
 	}
 }
