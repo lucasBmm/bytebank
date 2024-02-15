@@ -19,7 +19,7 @@ public class AccountController {
 	private AuthenticationService userService;
 
 	@GetMapping("balance")
-	public ResponseEntity<?> getBalance() {
+	public ResponseEntity<BalanceRecord> getBalance() {
 		User currentUser = userService.getCurrentUser();
 		
 		return ResponseEntity.ok(new BalanceRecord(currentUser.getAccount().getBalance()));

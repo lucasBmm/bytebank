@@ -11,4 +11,8 @@ export class AccountService {
   getBalance() {
     return this.http.get<IBalance>('rest/account/balance');
   }
+
+  addBalance(depositValue: number) {
+    return this.http.post<IBalance>('rest/account/deposit', { depositValue });
+  }
 }

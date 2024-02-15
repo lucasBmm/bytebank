@@ -20,6 +20,22 @@ export class AuthService {
     );
   }
 
+  public register(email: string, password: string, fullname: string) {
+    return this.http.post<null>('rest/auth/register', { email, password, fullname });
+  }
+
+  public setSession(res: Token) {
+    localStorage.setItem('token', res.token);
+  }
+
+  public removeToken(): void {
+    localStorage.clear();
+  }
+
+  public getToken() {
+    return localStorage.getItem('token');
+  }
+
   public getUser(): Observable<UserDetails> {
     if (this.getUserLocal()) {
       return of(this.getUserLocal());
@@ -38,23 +54,7 @@ export class AuthService {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  public removeToken() {
-    localStorage.clear();
-  }
-
-  public register(email: string, password: string, fullname: string) {
-    return this.http.post<Token>('rest/auth/register', { email, password });
-  }
-
-  private setSession(res: Token) {
-    localStorage.setItem('token', res.token);
-  }
-
   public authenticated() {
     return !!localStorage.getItem('token');
-  }
-
-  public getToken() {
-    return localStorage.getItem('token');
   }
 }

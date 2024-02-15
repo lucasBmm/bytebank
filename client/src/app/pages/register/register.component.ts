@@ -27,7 +27,7 @@ export class RegisterComponent {
   register() {
     if (this.allFieldsValid()) {
       // @ts-ignore: Object is possibly 'null'.
-      this.authService.register(this.email.value, this.password.value, this.fullname.value).subscribe(data => {
+      this.authService.register(this.email.value, this.password.value, this.fullname.value).subscribe(() => {
         this.router.navigate(['/login']);
       });
     } else {
