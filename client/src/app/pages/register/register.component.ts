@@ -25,7 +25,7 @@ export class RegisterComponent {
   }
 
   register() {
-    if (this.allFieldsValid()) {
+    if (this.form.valid) {
       // @ts-ignore: Object is possibly 'null'.
       this.authService.register(this.email.value, this.password.value, this.fullname.value).subscribe(() => {
         this.router.navigate(['/login']);
@@ -33,10 +33,6 @@ export class RegisterComponent {
     } else {
       console.log("Invalid!");
     }
-  }
-
-  private allFieldsValid(): boolean | undefined {
-    return this.email?.valid && this.password?.valid && this.confirmPassword?.valid && this.fullname?.valid;
   }
 
   get email() {
@@ -55,7 +51,7 @@ export class RegisterComponent {
     return this.form.get('confirmPassword');
   }
 
-  private matchPasswords(control: FormControl) {
+  public matchPasswords(control: FormControl) {
     const password = this.form?.get('password')?.value;
     return password === control.value ? null : { mismatch: true };
   }

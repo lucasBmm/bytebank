@@ -22,9 +22,9 @@ export class AccountComponent implements OnInit {
     if(this.authService.authenticated()) {
       this.authService.getUser().subscribe(user => {
         this.username = user.fullname;
-      })
-    }
+      });
 
-    this.accountService.getBalance().subscribe(res => this.balance = res.balance);
+      this.accountService.getBalance().subscribe(res => this.balance = res.balance);
+    }
   }
 }

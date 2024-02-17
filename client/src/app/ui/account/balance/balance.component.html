@@ -9,9 +9,9 @@
     </div>
     <div class="divisor"></div>
     <p class="conta">Conta corrente</p>
-    <p data-testid="saldo" class="valor">
+    <p class="valor">
         <span class="currency">R$</span>
-        <span *ngIf="show; else dots">{{ balance }}</span>
+        <span *ngIf="show; else dots" class="balance_value">{{ balance }}</span>
         <ng-template #dots>
             <span class="dot"></span>
             <span class="dot"></span>
