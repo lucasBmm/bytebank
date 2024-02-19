@@ -1,4 +1,4 @@
-package br.com.bytebank.server.controller;
+package br.com.bytebank.server.record;
 
 import java.math.BigDecimal;
 

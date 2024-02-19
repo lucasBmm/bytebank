@@ -1,5 +1,8 @@
 package br.com.bytebank.server.domain.user;
 
+import br.com.bytebank.server.security.TokenService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -24,6 +27,9 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private TokenService tokenService;
     
     @Autowired
     private AccountService accountService;
@@ -41,7 +47,7 @@ public class AuthenticationService implements UserDetailsService {
     
     public User getCurrentUser() {
     	  return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    	}
+    }
 
     @Transactional
 	public User createUser(@Valid RegisterData data) throws AuthenticationException {

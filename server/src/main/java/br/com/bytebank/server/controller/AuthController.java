@@ -32,7 +32,7 @@ public class AuthController {
 	
 	@Autowired
 	private AuthenticationService service;
-	
+
 	@Autowired
 	private AuthenticationManager manager;
 
@@ -41,10 +41,12 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Token> login(@RequestBody @Valid AuthData data) {
-		try {			
+		try {
 			var authenticationToken = new UsernamePasswordAuthenticationToken(data.email(), data.password());
 			var authentication = manager.authenticate(authenticationToken);
-			var token = tokenService.generateToken((User) authentication.getPrincipal());
+			User user = (User) authentication.getPrincipal();
+			var token = tokenService.generateToken(user);
+
 			return ResponseEntity.ok(new Token(token));
 		}
 		 catch(AuthenticationException e) {
@@ -61,7 +63,6 @@ public class AuthController {
 			
 			return ResponseEntity.created(uri.toUri()).build();
 		} catch (AuthenticationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
