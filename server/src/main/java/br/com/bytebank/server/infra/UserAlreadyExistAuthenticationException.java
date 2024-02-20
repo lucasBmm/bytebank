@@ -2,7 +2,7 @@ package br.com.bytebank.server.infra;
 
 import org.springframework.security.core.AuthenticationException;
 
-public class UserAlreadyExistAuthenticationException extends AuthenticationException {
+public class UserAlreadyExistAuthenticationException extends Exception {
 
 	/**
 	 * 

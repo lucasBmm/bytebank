@@ -1,6 +1,7 @@
 package br.com.bytebank.server.domain.user;
 
 import br.com.bytebank.server.domain.account.AccountService;
+import br.com.bytebank.server.infra.UserAlreadyExistAuthenticationException;
 import br.com.bytebank.server.record.RegisterData;
 import br.com.bytebank.server.security.TokenService;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -19,9 +24,6 @@ class AuthenticationServiceTest {
 
     @Mock
     private UserRepository repository;
-
-    @Mock
-    private TokenService tokenService;
 
     @Mock
     private AccountService accountService;
@@ -55,5 +57,57 @@ class AuthenticationServiceTest {
         );
 
         Assertions.assertNotNull(exception);
+    }
+
+    @Test
+    @DisplayName("should return saved user from repository")
+    void createUserSuccess() {
+        RegisterData data = new RegisterData("user@email.com", "user fullname", "password");
+        User toBeCheckedUser = new User(data);
+
+        when(repository.findByEmail(data.email())).thenReturn(null);
+        when(repository.save(any())).thenReturn(toBeCheckedUser);
+
+        User createdUser = service.createUser(data);
+
+        verify(repository, times(1)).findByEmail(data.email());
+        verify(repository, times(1)).save(toBeCheckedUser);
+        Assertions.assertEquals(createdUser.getEmail(), data.email());
+    }
+
+    @Test
+    @DisplayName("should throw error when user already exist in db")
+    void createUserFail() {
+        RegisterData data = new RegisterData("user@email.com", "user fullname", "password");
+        User user = new User(data);
+
+        when(repository.findByEmail(data.email())).thenReturn((UserDetails) user);
+
+        UserAlreadyExistAuthenticationException exception = Assertions.assertThrows(
+                UserAlreadyExistAuthenticationException.class, () -> service.createUser(data)
+        );
+
+        Assertions.assertNotNull(exception);
+    }
+
+    @Test
+    @DisplayName("should not return a duplicate number")
+    void generateAccountNumber() {
+        Set<String> generatedAccountNumbers = new HashSet<>();
+
+        when(accountService.isAccountNumberExists(anyString())).thenAnswer(invocation -> {
+            String accountNumber = invocation.getArgument(0);
+            return generatedAccountNumbers.contains(accountNumber);
+        });
+
+        int numberOfAccountsNumberToTest = 1000;
+        for (int i = 0; i < numberOfAccountsNumberToTest; i++) {
+            String accountNumber = service.generateAccountNumber();
+            Assertions.assertNotNull(accountNumber);
+            Assertions.assertFalse(generatedAccountNumbers.contains(accountNumber));
+            generatedAccountNumbers.add(accountNumber);
+        }
+
+        verify(accountService, atLeast(numberOfAccountsNumberToTest)).isAccountNumberExists(anyString());
     }
 }

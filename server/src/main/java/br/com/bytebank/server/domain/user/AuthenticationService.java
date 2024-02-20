@@ -50,7 +50,7 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     @Transactional
-	public User createUser(@Valid RegisterData data) throws AuthenticationException {
+	public User createUser(@Valid RegisterData data) throws UserAlreadyExistAuthenticationException {
 		if (repository.findByEmail(data.email()) != null) {
 			throw new UserAlreadyExistAuthenticationException("User already exists!");
 		}
@@ -67,7 +67,7 @@ public class AuthenticationService implements UserDetailsService {
 		return repository.save(user);
 	}
 	
-	private String generateAccountNumber() {
+	public String generateAccountNumber() {
         String accountNumber;
         do {
             accountNumber = generateRandomAccountNumber();
