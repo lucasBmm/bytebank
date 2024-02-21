@@ -1,6 +1,8 @@
 package br.com.bytebank.server.domain.user;
 
+import br.com.bytebank.server.infra.AccountNotFoundException;
 import br.com.bytebank.server.security.TokenService;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -67,7 +69,8 @@ public class AuthenticationService implements UserDetailsService {
 		return repository.save(user);
 	}
 	
-	public String generateAccountNumber() {
+	@SneakyThrows
+    public String generateAccountNumber() {
         String accountNumber;
         do {
             accountNumber = generateRandomAccountNumber();

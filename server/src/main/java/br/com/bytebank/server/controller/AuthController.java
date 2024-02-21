@@ -57,7 +57,6 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody @Valid RegisterData data, UriComponentsBuilder uriBuilder) throws Exception {
-
 		User createdUser = service.createUser(data);
 
 		UriComponents uri = uriBuilder.path("/rest/auth/register").buildAndExpand(createdUser.getId());

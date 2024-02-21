@@ -14,6 +14,12 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.badRequest().body(record);
 	}
 
+	@ExceptionHandler(AccountNotFoundException.class)
+	private ResponseEntity<ExceptionRecord> accountDontExist(AccountNotFoundException ex) {
+		ExceptionRecord record = new ExceptionRecord("Essa conta não está cadastrada.", 404);
+		return ResponseEntity.badRequest().body(record);
+	}
+
 	@ExceptionHandler(Exception.class)
 	private ResponseEntity<ExceptionRecord> generalError(Exception ex) {
 		ExceptionRecord record = new ExceptionRecord(ex.getMessage(), 500);

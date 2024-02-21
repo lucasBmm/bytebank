@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
 
     @Test
     @DisplayName("should return saved user from repository")
-    void createUserSuccess() {
+    void createUserSuccess() throws UserAlreadyExistAuthenticationException {
         RegisterData data = new RegisterData("user@email.com", "user fullname", "password");
         User toBeCheckedUser = new User(data);
 
@@ -100,7 +100,7 @@ class AuthenticationServiceTest {
             return generatedAccountNumbers.contains(accountNumber);
         });
 
-        int numberOfAccountsNumberToTest = 1000;
+        int numberOfAccountsNumberToTest = 100010;
         for (int i = 0; i < numberOfAccountsNumberToTest; i++) {
             String accountNumber = service.generateAccountNumber();
             Assertions.assertNotNull(accountNumber);
