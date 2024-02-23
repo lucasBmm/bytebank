@@ -1,9 +1,14 @@
 package br.com.bytebank.server.domain.account;
 
+import br.com.bytebank.server.domain.user.AuthenticationService;
+import br.com.bytebank.server.domain.user.User;
 import br.com.bytebank.server.infra.AccountNotFoundException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 @Service
 public class AccountService {
@@ -11,14 +16,16 @@ public class AccountService {
 	@Autowired
     private AccountRepository accountRepository;
 
-    @SneakyThrows
+    @Autowired
+    private AuthenticationService userService;
+
     public boolean isAccountNumberExists(String accountNumber) {
-        var account = accountRepository.existsByAccountNumber(accountNumber);
+        return accountRepository.existsByAccountNumber(accountNumber);
+    }
 
-        if (account) {
-            return account;
-        }
+    public BigDecimal getUserBalance() {
+        User currentUser = userService.getCurrentUser();
 
-        throw new AccountNotFoundException("Not found");
+        return BigDecimal.ZERO;
     }
 }

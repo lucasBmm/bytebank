@@ -50,37 +50,5 @@ public class AuthenticationService implements UserDetailsService {
     public User getCurrentUser() {
     	  return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
-
-    @Transactional
-	public User createUser(@Valid RegisterData data) throws UserAlreadyExistAuthenticationException {
-		if (repository.findByEmail(data.email()) != null) {
-			throw new UserAlreadyExistAuthenticationException("User already exists!");
-		}
-		
-		var accountNumber = generateAccountNumber();
-		
-		Account account = new Account(accountNumber);
-		
-		User user = new User(data);
-		
-		user.setAccount(account);
-		account.setUser(user);
-		
-		return repository.save(user);
-	}
-	
-	@SneakyThrows
-    public String generateAccountNumber() {
-        String accountNumber;
-        do {
-            accountNumber = generateRandomAccountNumber();
-        } while (accountService.isAccountNumberExists(accountNumber));
-        return accountNumber;
-    }
-
-    private String generateRandomAccountNumber() {
-        Random random = new Random();
-        return String.format("%05d", random.nextInt(100000)); // Generate a random 5-digit number
-    }
 }
 

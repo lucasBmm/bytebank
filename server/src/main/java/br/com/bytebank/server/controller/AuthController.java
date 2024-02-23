@@ -1,5 +1,6 @@
 package br.com.bytebank.server.controller;
 
+import br.com.bytebank.server.domain.user.UserService;
 import br.com.bytebank.server.infra.UserAlreadyExistAuthenticationException;
 import jakarta.validation.Valid;
 
@@ -35,6 +36,9 @@ public class AuthController {
 	private AuthenticationService service;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private AuthenticationManager manager;
 
 	@Autowired
@@ -57,7 +61,7 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody @Valid RegisterData data, UriComponentsBuilder uriBuilder) throws Exception {
-		User createdUser = service.createUser(data);
+		User createdUser = userService.createUser(data);
 
 		UriComponents uri = uriBuilder.path("/rest/auth/register").buildAndExpand(createdUser.getId());
 
