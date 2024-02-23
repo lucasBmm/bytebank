@@ -30,12 +30,6 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private TokenService tokenService;
-    
-    @Autowired
-    private AccountService accountService;
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     	UserDetails user = repository.findByEmail(email);

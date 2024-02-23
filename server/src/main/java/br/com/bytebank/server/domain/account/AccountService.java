@@ -17,15 +17,15 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private AuthenticationService userService;
+    private AuthenticationService authService;
 
     public boolean isAccountNumberExists(String accountNumber) {
         return accountRepository.existsByAccountNumber(accountNumber);
     }
 
     public BigDecimal getUserBalance() {
-        User currentUser = userService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
-        return BigDecimal.ZERO;
+        return currentUser.getAccount().getBalance();
     }
 }
